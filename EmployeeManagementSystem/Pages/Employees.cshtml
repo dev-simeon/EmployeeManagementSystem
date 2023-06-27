@@ -1,0 +1,227 @@
+﻿@page
+@model EmployeeManagementSystem.Pages.EmployeesModel
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<section class="d-flex flex-column gap-2 px-4 mt-4">
+    <div class="align-self-end">
+        <button type="button" class="btn btn-dark" data-bs-toggle="offcanvas" data-bs-target="#addEmployee">Add Employee
+        </button>
+    </div>
+    <div class="table-responsive table-striped p-4 bg-white rounded-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Job Title</th>
+                    <th>Department</th>
+                    <th>Net Salary</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @if (Model.Employees.Count > 0)
+            {
+                <tbody>
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <tr>
+                            <td>@employee.FirstName @employee.LastName</td>
+                            <td>@employee.JobTitle</td>
+                            <td>@employee.DepartmentId</td>
+                            <td>₦@employee.Salary</td>
+                            <td class="d-flex gap-1">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#deleteEmployee"          data-id="@employee.Id" data-employee-name="@employee.FirstName" 
+                                    class="btn btn-danger delete-button">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
+                                        data-bs-target="#editEmployee-@employee.Id">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            }
+        </table>
+    </div>
+</section>
+
+
+<!-- Add Employees Offcanvas -->
+<div class="offcanvas bg-white shadow-sm p-4 gap-4 offcanvas-end overflow-auto" data-bs-backdrop="false" data-bs-scroll="true" id="addEmployee"
+     aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header py-0 px-0">
+        <h6 class="mb-0 fw-bold">New Employee</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+        </button>
+    </div>
+
+    <form method="post" class="d-flex flex-column gap-2">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="d-flex gap-3">
+            <div>
+                <label class="form-label mb-1" asp-for="FirstName">First Name</label>
+                <input class="form-control" type="text" asp-for="FirstName" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="LastName">Last Name</label>
+                <input class="form-control" type="text" asp-for="LastName" required />
+            </div>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="Email">Email</label>
+            <input class="form-control" type="email" asp-for="Email" required/>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="PhoneNumber">Phone Number</label>
+            <input class="form-control" type="tel" asp-for="PhoneNumber" required/>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="Address">Address</label>
+            <input class="form-control" type="text" asp-for="Address" required/>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="DateOfBirth">Date of Birth</label>
+            <input class="form-control" type="date" asp-for="DateOfBirth" required/>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="JobTitle">Job Title</label>
+            <input class="form-control" type="text" asp-for="JobTitle" required/>
+        </div>
+        <div>
+            <select class="form-select mb-1" asp-for="Role" required>
+                <option value="Employee">Employee</option>
+                <option value="Human Resource Manager">Human Resource Manager</option>
+                <option value="Marketing Manager">Marketing Manager</option>
+                <option value="Product Manager">Product Manager</option>
+                <option value="Accountant">Accountant</option>
+                <option value="Admin">Admin</option>
+            </select>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="Salary">Salary</label>
+            <input class="form-control" type="number" asp-for="Salary" required/>
+        </div>
+        <div class="mt-1 d-flex align-items-center gap-1">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Edit Employee -->
+@foreach (var employee in Model.Employees)
+{
+    <div class="offcanvas bg-white shadow-sm p-4 gap-4 offcanvas-end overflow-auto" data-bs-backdrop="false" data-bs-scroll="true" id="editEmployee-@employee.Id"
+         aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header py-0 px-0">
+            <h6 class="mb-0 fw-bold">Edit @employee.Id</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+            </button>
+        </div>
+
+        <form method="post" class="d-flex flex-column gap-2" asp-page-handler="EditEmployee"
+              asp-route-employeeId="@employee.Id">
+            <div class="d-flex gap-3">
+                <div>
+                    <label class="form-label mb-1" asp-for="FirstName">First Name</label>
+                    <input class="form-control" value="@employee.FirstName" type="text" asp-for="FirstName" readonly />
+                </div>
+                <div>
+                    <label class="form-label mb-1" asp-for="LastName">Last Name</label>
+                    <input class="form-control" value="@employee.LastName" type="text" asp-for="LastName" readonly />
+                </div>
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Email">Email</label>
+                <input class="form-control" value="@employee.Email" type="email" asp-for="Email" readonly />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="PhoneNumber">Phone Number</label>
+                <input class="form-control" value="@employee.PhoneNumber" type="tel" asp-for="PhoneNumber" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Address">Address</label>
+                <input class="form-control" value="@employee.Address" type="text" asp-for="Address" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="DateOfBirth">Date of Birth</label>
+                <input class="form-control" value="@employee.DateOfBirth.ToShortDateString()" type="text" asp-for="DateOfBirth" readonly />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="JobTitle">Job Title</label>
+                <input class="form-control" value="@employee.JobTitle" type="text" asp-for="JobTitle" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Role">Role</label>
+                <select class="form-select mb-1" asp-for="Role" required>
+                    <option value="Employee">Employee</option>
+                    <option value="Human Resource Manager">Human Resource Manager</option>
+                    <option value="Marketing Manager">Marketing Manager</option>
+                    <option value="Product Manager">Product Manager</option>
+                    <option value="Accountant">Accountant</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Salary">Salary</label>
+                <input class="form-control" value="@employee.Salary" type="number" asp-for="Salary" required />
+            </div>
+            <div class="mt-1 d-flex align-items-center gap-1">
+                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+            </div>
+        </form>
+    </div>
+}
+
+
+
+
+<!-- Delete Employee -->
+<div class="modal fade" id="deleteEmployee" data-bs-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="deleteEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEmployeeModalLabel">Delete employee -<span id="empname"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="d-flex flex-column gap-3" asp-page-handler="DeleteEmployee">
+                    <input type="hidden" name="employeeId" id="deleteEmployeeId" />
+                    <div class="mt-1 d-flex align-items-center gap-1 justify-content-end">
+                        <button type="submit" class="btn btn-danger">delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const deleteEmployeeModal = document.getElementById("deleteEmployee");
+
+            deleteEmployeeModal.addEventListener("show.bs.modal", function(event) {
+                let button = event.relatedTarget;
+                let employeeId = button.getAttribute('data-id');
+                let employeeName = button.getAttribute('data-employee-name');
+
+                let hiddenInputField  = deleteEmployeeModal.querySelector("#deleteEmployeeId");
+                hiddenInputField.value = employeeId;
+
+                deleteEmployeeModal.querySelector("#empname").innerHTML = employeeName;
+            });
+        })
+    </script>
+}
+

@@ -1,0 +1,154 @@
+﻿@page
+@using EmployeeManagementSystem.Data;
+@model EmployeeManagementSystem.Pages.DepartmentModel
+@{
+    ViewData["Title"] = "Department";
+}
+
+<section class="d-flex flex-column gap-2 px-4 mt-4">
+    <div class="align-self-end">
+        <button type="button" class="btn btn-dark" data-bs-toggle="offcanvas" data-bs-target="#addDepartment">
+            Add Department
+        </button>
+    </div>
+    <div class="table-responsive table-striped p-4 bg-white rounded-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date Created</th>
+                    <th>Department Name</th>
+                    <th>Department Supervisor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @if(Model.Departments!.Count > 0)
+            {
+                @foreach (var department in Model.Departments)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@department.DateCreated.ToShortDateString()</td>
+                            <td>@department.DepartmentName</td>
+                            <td>@department.ManagerId</td>
+                            <td class="d-flex gap-1">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#deleteDepartment"          data-id="@department.Id" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
+                                    data-bs-target="#editDepartmentModal-@department.Id">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+
+</section>
+
+<!-- Add Department Offcanvas -->
+<div class="offcanvas bg-white shadow-sm p-4 gap-4 offcanvas-end overflow-auto" data-bs-backdrop="false" data-bs-scroll="true" id="addDepartment"
+     aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header py-0 px-0">
+        <h6 class="mb-0 fw-bold">New Department</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
+        </button>
+    </div>
+
+    <form method="post" class="d-flex flex-column gap-2">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label class="form-label mb-1" asp-for="DepartmentName">Department Name</label>
+            <input class="form-control" type="text" asp-for="DepartmentName" required />
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="DepartmentSupervisor">Department Supervisor</label>
+            <select class="form-select" asp-for="DepartmentSupervisor" asp-items="Model.Employees" required>
+                <option value="">select department supervisor</option>
+            </select>
+        </div>
+        <div class="mt-1 d-flex align-items-center gap-1">
+            <button type="submit" class="btn btn-dark">Add</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+    </form>
+</div>
+
+
+<!-- Edit Department -->
+@foreach (var department in Model.Departments)
+{
+    <div class="modal fade" id="editDepartmentModal-@department.Id" data-bs-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="editDepartmentModalLabel-@department.Id" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDepartmentModalLabel-@department.Id">Edit @department.DepartmentName</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="d-flex flex-column gap-2" asp-page-handler="EditDepartment" 
+                        asp-route-departmentId="@department.Id">
+                        <div>
+                            <label class="form-label mb-1" asp-for="DepartmentName">Department Name</label>
+                            <input class="form-control" type="text" asp-for="DepartmentName" value="@department.DepartmentName" required />
+                        </div>
+                        <div>
+                            <label class="form-label mb-1" asp-for="DepartmentSupervisor">Department Supervisor</label>
+                            <select class="form-select" asp-for="DepartmentSupervisor" 
+                                asp-items="Model.Employees" required>
+                                <option value="">select department supervisor</option>
+                            </select>
+                        </div>
+                        <div class="mt-3 d-flex align-items-center gap-1 justify-content-end">
+                            <button type="submit" class="btn btn-dark">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Delete Department -->
+<div class="modal fade" id="deleteDepartment" data-bs-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="deleteDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteDepartmentModalLabel">Delete employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="d-flex flex-column gap-3" asp-page-handler="DeleteDepartment">
+                    <input type="hidden" name="departmentId" id="deleteDepartmentId" />
+                    <div class="mt-1 d-flex align-items-center gap-1 justify-content-end">
+                        <button type="submit" class="btn btn-danger">delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const deleteEmployeeModal = document.getElementById("deleteDepartment");
+
+            deleteEmployeeModal.addEventListener("show.bs.modal", function (event) {
+                let button = event.relatedTarget;
+                let departmentId = button.getAttribute('data-id');
+                let deleteDepartmentId = deleteEmployeeModal.querySelector("#deleteDepartmentId");
+                deleteDepartmentId.value = departmentId;
+            });
+        })
+    </script>
+}

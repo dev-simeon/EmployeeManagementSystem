@@ -1,0 +1,53 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EmployeeManagementSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-app-end-version="true" />
+    <link rel="stylesheet" href="~/EmployeeManagementSystem.styles.css" asp-append-version="true" />
+</head>
+
+<body class="vh-100">
+    <main class="d-flex h-100">
+        <section class="d-flex align-items-center align-items-md-start col-12 col-md-5 col-lg-4 bg-light
+            flex-column gap-3 py-4 px-4">
+            <a class="navbar-brand fs-4 text-dark text-decoration-none" asp-area="" asp-page="/Index">Employee Management</a>
+
+            <form method="post" class="d-flex col-11 col-sm-6 col-md-12 flex-column gap-3">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <div>
+                    <label class="form-label mb-1" asp-for="Email">Email Address</label>
+                    <input class="form-control" type="email" asp-for="Email" required />
+                </div>
+
+                <div>
+                    <label class="form-label mb-1" asp-for="Password">Password</label>
+                    <input class="form-control" type="password" asp-for="Password" required />
+                </div>
+                <div>
+                    <button class="btn btn-dark" type="submit">Log In</button>
+                </div>
+
+                <p class="mb-0 mt-2">
+                    Don't have an account?
+                    <a class="text-decoration-none" asp-page="SignUp">Create one now</a>
+                </p>
+            </form>
+        </section>
+
+        <section class="col-md-7 col-lg-8">
+            <div class="background"></div>
+        </section>
+    </main>
+</body>
+
+</html>

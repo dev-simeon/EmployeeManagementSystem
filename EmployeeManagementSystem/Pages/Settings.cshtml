@@ -1,0 +1,317 @@
+﻿@page
+@model EmployeeManagementSystem.Pages.SettingsModel
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<ul id="tabButtonsCont" class="nav border-bottom bg-white px-4 flex-nowrap overflow-auto gap-3 pt-3">
+    <li class="nav-item">
+        <a class="text-dark text-small px-0 pt-0 pb-3 nav-link sub-nav"
+           href="#basicInfo">
+           Basic Info
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="text-dark text-small px-0 pt-0 pb-3 nav-link sub-nav active" href="#changePassword">
+            Change Password
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="text-dark text-small px-0 pt-0 pb-3 nav-link sub-nav"
+           href="#bankAccount">
+            Bank Account
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="text-dark text-small px-0 pt-0 pb-3 nav-link sub-nav"
+           href="#qualifications">
+           Qualifications
+        </a>
+    </li>
+</ul>
+
+<div class="d-flex flex-column gap-3 p-4">
+    <section id="changePassword" class="change-password-wrapper bg-white p-4 rounded-3 d-flex flex-column               gap-3">
+        <div class="d-flex flex-column gap-1 border-bottom pb-3">
+            <h5 class="fw-bold mb-0">Change Password</h5>
+            <p class="mb-0 text-small text-dark">
+                Update your profile and how people can contact you generally.
+            </p>
+        </div>
+        <form method="post" asp-page-handler="ChangePassword" class="d-flex flex-column gap-2">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="OldPassword" class="form-label mb-1">Old Password</label>
+                <input type="password" class="form-control" asp-for="OldPassword" required/>
+            </div>
+            <div>
+                <label asp-for="NewPassword" class="form-label mb-1">New Password</label>
+                <input type="password" class="form-control" asp-for="NewPassword" required/>
+            </div>
+            <div>
+                <label asp-for="ConfirmPassword" class="form-label mb-1">Confirm Password</label>
+                <input type="password" class="form-control" asp-for="ConfirmPassword"  required/>
+            </div>
+            <div class="mt-1">
+                <button type="submit" class="btn btn-dark">Change Password</button>
+            </div>
+        </form>
+    </section>
+
+    <section id="bankAccount" class="bank-account-wrapper d-none d-flex flex-column gap-3 bg-white p-4                  rounded-3">
+        <div class="d-flex flex-column gap-1 border-bottom pb-3">
+            <h5 class="fw-bold mb-0">Bank Accounts</h5>
+            <p class="mb-0 text-small text-dark">
+                Add your bank details, so you can have
+                easy and fast payouts.
+            </p>
+        </div>
+        <div class="d-flex flex-column gap-3">
+            @if(Model.Account == null)
+            {
+                <a href="#addBankAccount" data-bs-toggle="offcanvas" aria-expanded="false"
+                   aria-label="Toggle navigation" class="d-flex text-decoration-none text-dark align-items-                         center gap-1">
+                    <svg width="23" height="23" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/                          svg">
+                        <path d="M15.5913 27.8208C22.4949 27.8208 28.0913 22.2244 28.0913 15.3208C28.0913                                   8.41724 22.4949 2.8208 15.5913 2.8208C8.68775 2.8208 3.09131 8.41724 3.09131 15.3208C3.09131 22.2244 8.68775 27.8208 15.5913 27.8208Z" stroke="#212529" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M15.5913 10.3208V20.3208" stroke="#212529" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M10.5913 15.3208H20.5913" stroke="#212529" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <p class="mb-0">Add bank account</p>
+                </a>
+            }
+            @if (Model.Account != null)
+            {
+                <div class="d-flex align-items-start gap-2">
+                    <img class="img-fluid" src="images/ph_bank.svg" alt="">
+                    <div>
+                        <p class="fw-bold mb-0">@Model.Account.BankName</p>
+                        <p class="text-small mb-0 text-dark">@Model.Account.AccountName</p>
+                        <p class="text-small mb-0 text-dark text-dark-50">@Model.Account.AccountNumber
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section id="qualifications" class="bank-account-wrapper d-none d-flex flex-column gap-3 bg-white p-4 rounded-3">
+        <div class="d-flex flex-column gap-1 border-bottom pb-2">
+            <h5 class="fw-bold mb-0">Qualifications</h5>
+            <p class="mb-0 text-small text-dark">
+                Add your qualification now.
+            </p>
+        </div>
+        <form method="post" asp-page-handler="AddQualification" class="d-flex flex-column gap-2">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label class="form-label mb-1" asp-for="Qualification.InstitutionName">Institution</label>
+                <input type="text" asp-for="Qualification.InstitutionName" class="form-control" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Qualification.CertificateType">Certificate Type</label>
+                <input type="text" class="form-control" asp-for="Qualification.CertificateType" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Qualification.StartDate">Start Date</label>
+                <input type="date" asp-for="Qualification.StartDate" class="form-control" required />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Qualification.EndDate">End Date</label>
+                <input type="date" asp-for="Qualification.EndDate" class="form-control" required />
+            </div>
+            <div class="mt-1">
+                <button type="submit" class="btn btn-dark">Add Qualification</button>
+            </div>
+        </form>
+    </section>
+
+    <section id="basicInfo" class="bank-account-wrapper d-none d-flex flex-column gap-3 bg-white p-4 rounded-3">
+        <div class="d-flex flex-column gap-1 border-bottom pb-2">
+            <h5 class="fw-bold mb-0">Basic Information</h5>
+        </div>
+        <form method="post" class="d-flex flex-column gap-2">
+            <div class="d-flex gap-3">
+                <div>
+                    <label class="form-label mb-1">First Name</label>
+                    <input class="form-control" value="@Model.CurrentAuthenticatedEmployee.FirstName" readonly />
+                </div>
+                <div>
+                    <label class="form-label mb-1">Last Name</label>
+                    <input class="form-control" value="@Model.CurrentAuthenticatedEmployee.LastName" readonly />
+                </div>
+            </div>
+            
+            <div>
+                <label class="form-label mb-1">Email Address</label>
+                <input class="form-control" value="@Model.CurrentAuthenticatedEmployee.Email" readonly />
+            </div>
+            <div>
+                <label class="form-label mb-1" >Phone Number</label>
+                <input class="form-control" value="@Model.CurrentAuthenticatedEmployee.PhoneNumber" readonly />
+            </div>
+            <div>
+                <label class="form-label mb-1" asp-for="Salary">Salary</label>
+                <input class="form-control" type="number" value="@Model.CurrentAuthenticatedEmployee.Salary" 
+                asp-for="Salary" />
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-dark">Save</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+
+<!-- Add bank-account -->
+<div class="offcanvas bg-white shadow-sm p-4 gap-4 offcanvas-end" data-bs-backdrop="false" data-bs-scroll="true" id="addBankAccount" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header py-0 px-0">
+        <h6 class="offcanvas-title" id="offcanvasExampleLabel">Add Bank Account</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <form method="post" asp-page-handler="AddBankAccount" class="d-flex flex-column gap-2">
+        <div>
+            <select class="form-select" asp-for="Account.BankName" required>
+                <option value="Access Bank">Access Bank</option>
+                <option value="First Bank">First Bank</option>
+                <option value="Sterling Bank">Sterling Bank</option>
+                <option value="Polaris Bank">Polaris Bank</option>
+                <option value="Union Bank">Union Bank</option>
+                <option value="UBA">UBA</option>
+                <option value="Zenith Bank">Zenith Bank</option>
+                <option value="FCMB">FCMB</option>
+                <option value="Stanbic IBTC">Stanbic IBTC</option>
+                <option value="GTBank">GTBank</option>
+            </select>
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="Account.AccountName">Account Name</label>
+            <input class="form-control" type="text" asp-for="Account.AccountName" required />
+        </div>
+        <div>
+            <label class="form-label mb-1" asp-for="Account.AccountNumber">Account Number</label>
+            <input class="form-control" type="number" asp-for="Account.AccountNumber" required />
+        </div>
+        <div class="mt-1 d-flex align-items-center gap-1">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<!-- Success Modal -->
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <!-- Modal -->
+    <div class="modal modal-backdrop d-block bg-body bg-opacity-75" id="successModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header py-3">
+                    <h5 class="modal-title text-success">@Model.SuccessMessage</h5>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-modal" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+ 
+
+@section Scripts{
+    <script>
+        let changePasswordSection = document.querySelector("#changePassword");
+        let bankAccountSection = document.querySelector("#bankAccount");
+        let qualificationSection = document.querySelector("#qualifications");
+        let basicInformationSection = document.querySelector("#basicInfo");
+        let buttons = document.querySelectorAll(".nav-link.sub-nav");
+
+        changePageSection(location.hash);
+
+        buttons.forEach(element => {
+            element.addEventListener("click", () => {
+                changePageSection(new URL(element.href).hash);
+            });
+        });
+
+        function changePageSection(urlHash) {
+            let tabButtonsCont = document.querySelector("#tabButtonsCont");
+            if (urlHash.substring(1) == "bankAccount") {
+                showBankAccountSection(tabButtonsCont);
+            }
+            else if (urlHash.substring(1) == "qualifications") {
+                showQualificationsSection(tabButtonsCont);
+            }
+            else if (urlHash.substring(1) == "changePassword") {
+                showChangePasswordSection(tabButtonsCont);
+            }
+            else {
+                showBasicInformationSection(tabButtonsCont);
+            }
+        };
+
+        function showBankAccountSection(tabButtonsContainer) {
+            changePasswordSection.classList.add("d-none");
+            bankAccountSection.classList.remove("d-none");
+            qualificationSection.classList.add("d-none");
+            basicInformationSection.classList.add("d-none");
+            tabButtonsContainer.children[0].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[2].firstElementChild.classList.add("active");
+            tabButtonsContainer.children[1].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[3].firstElementChild.classList.remove("active");
+        };
+
+        function showChangePasswordSection(tabButtonsContainer) {
+            bankAccountSection.classList.add("d-none");
+            basicInformationSection.classList.add("d-none");
+            changePasswordSection.classList.remove("d-none");
+            qualificationSection.classList.add("d-none");
+            tabButtonsContainer.children[1].firstElementChild.classList.add("active");
+            tabButtonsContainer.children[0].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[2].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[3].firstElementChild.classList.remove("active");
+        };
+
+        function showQualificationsSection(tabButtonsContainer) {
+            bankAccountSection.classList.add("d-none")
+            basicInformationSection.classList.add("d-none");
+            changePasswordSection.classList.add("d-none");
+            qualificationSection.classList.remove("d-none");
+            tabButtonsContainer.children[0].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[1].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[2].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[3].firstElementChild.classList.add("active");
+        };
+
+        function showBasicInformationSection(tabButtonsContainer) {
+            bankAccountSection.classList.add("d-none")
+            changePasswordSection.classList.add("d-none");
+            qualificationSection.classList.add("d-none");
+            basicInformationSection.classList.remove("d-none");
+            tabButtonsContainer.children[0].firstElementChild.classList.add("active");
+            tabButtonsContainer.children[1].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[2].firstElementChild.classList.remove("active");
+            tabButtonsContainer.children[3].firstElementChild.classList.remove("active");
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let modal = document.querySelector("#successModal")
+            let closeModalButton = document.querySelectorAll(".close-modal");
+
+            closeModalButton.forEach(element => {
+                element.addEventListener("click", () => {
+                    modal.classList.replace("d-block", "d-none");
+                });
+            });
+        })
+
+       
+
+       
+    </script>
+}

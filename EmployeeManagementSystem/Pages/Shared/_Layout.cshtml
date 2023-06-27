@@ -1,0 +1,121 @@
+﻿@using EmployeeManagementSystem.Data;
+
+@{
+    var id = User.FindFirst("OrganisationID")!.Value;
+    var db = new Db();
+    var organisation = db.FindAnOrganisationWithId(id);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EmployeeManagementSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EmployeeManagementSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body class="vh-100">
+    <nav class="h-100 border-end fixed-top start-0 bg-white box-shadow sidebar d-none d-lg-flex flex-column gap-3 py-4">
+        <div class="d-flex justify-content-center border-bottom mx-0 mx-lg-5 pb-4">
+            <a class="text-decoration-none fw-bold fs-4 text-dark text-center" asp-page="/Index">
+                @organisation.OrganisationName
+            </a>
+        </div>
+
+        <div class="h-100 d-flex flex-column gap-5 overflow-auto">
+            <ul class="navbar-nav gap-3 px-5 py-3 overflow-auto">
+                <li class="nav-item">
+                    <a class="nav-link link py-0 text-decoration-none text-dark" asp-page="Overview">Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark py-0 text-decoration-none" asp-page="Settings">Settings</a>
+                </li>
+                <li>
+                    <a class="nav-link text-dark pt-0 pb-2 text-decoration-none dropdown-toggle" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Admin
+                    </a>
+                    <ul class="collapse ps-4" id="collapseExample">
+                        <li class="nav-item">
+                            <a class="nav-link py-0 text-decoration-none text-dark" asp-page="Employees">Employees</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-decoration-none text-dark" asp-page="Department">Department</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-0 text-decoration-none text-dark" asp-page="Payroll">Payroll</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav px-5">
+                <li class="nav-item">
+                    <a class="nav-link text-dark py-0 text-decoration-none" asp-page="/Index">Log Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main role="main" class="pb-3 bg-light h-100">
+       <div class="bg-white py-3 px-4 box-shadow border-bottom align-items-center">
+            <div class="d-flex align-items-center gap-1">
+                <button class="navbar-toggler px-0 py-0 d-block d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <svg class="" width="22" height="22" viewBox="0 0 48 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 32H0V26.6667H24V32ZM48 18.6667H0V13.3333H48V18.6667ZM48        5.33333H24V0H48V5.33333Z" fill="#444468f2" />
+                        </svg>
+                    </span>
+                </button>
+                <h5 class="mb-0 fw-bold">@ViewData["Title"]</h5>
+            </div>
+        </div>
+        @RenderBody()
+    </main>
+
+    <!-- Offcanvas menu -->
+    <div class="offcanvas bg-white offcanvas-start" data-bs-backdrop="false" data-bs-scroll="true" id="sidebar"
+         aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header pt-4 pb-3 ms-1 px-4">
+            <button type="button" class="btn-close btn-close fs-5" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="d-flex justify-content-center border-bottom mx-5 pb-4">
+            <a class="text-decoration-none fw-bold fs-4 text-dark text-center" asp-page="/Index">
+                Organisation Name
+            </a>
+        </div>
+
+         <div class="h-100 d-flex flex-column gap-5 overflow-auto">
+            <ul class="navbar-nav gap-3 px-5 py-3 overflow-auto">
+                <li class="nav-item">
+                    <a class="nav-link link py-0 text-decoration-none text-dark" asp-page="Overview">Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link py-0 text-decoration-none text-dark" asp-page="Employees">Employees</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link py-0 text-decoration-none text-dark" asp-page="Department">Department</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark py-0 text-decoration-none" asp-page="Settings">Settings</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav px-5">
+                <li class="nav-item">
+                    <a class="nav-link text-dark py-0 text-decoration-none" asp-page="/Index">Log Out</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Offcanvas end -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
